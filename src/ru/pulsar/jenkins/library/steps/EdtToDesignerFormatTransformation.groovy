@@ -12,7 +12,9 @@ import ru.pulsar.jenkins.library.utils.Logger
 class EdtToDesignerFormatTransformation implements Serializable {
 
     public static final String WORKSPACE = 'build/edt-workspace'
+    public static final String WORKSPACE_EXT = 'build/edt-ext-workspace'
     public static final String CONFIGURATION_DIR = 'build/cfg'
+    public static final String EXT_DIR = 'build/ext'
     public static final String CONFIGURATION_ZIP = 'build/cfg.zip'
     public static final String CONFIGURATION_ZIP_STASH = 'cfg-zip'
 
@@ -35,6 +37,7 @@ class EdtToDesignerFormatTransformation implements Serializable {
         def env = steps.env();
 
         def srcDir = config.srcDir
+        def srcExtDirs = config.srcExtDirs
         def projectDir = new File("$env.WORKSPACE/$srcDir").getCanonicalPath()
         def workspaceDir = "$env.WORKSPACE/$WORKSPACE" 
         def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
@@ -54,6 +57,35 @@ class EdtToDesignerFormatTransformation implements Serializable {
 
         steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
         steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
+
+        //String workspaceExtDir
+        //String projectExtDir
+
+        srcExtDir.each{
+            def extPathParts = it.split('/')
+            def extName = extPathParts[extPathParts.size() - 1]
+
+            def projectExtDir = new File("$env.WORKSPACE_EXT/${it}").getCanonicalPath()
+            def workspaceExtDir = "$env.WORKSPACE_EXT/${extName}" 
+         
+            def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
+            def configurationExtRoot = "$env.WORKSPACE_EXT/$EXT_DIR/${extName}"
+            
+            def configurationExtZip = "build/ext-${extName}.zip"
+            def configurationExtZipStash = "${extName}-zip"
+
+            ringCommandExt = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceExtDir\" --project \"$projectExtDir\" --configuration-files \"$configurationExtRoot\""
+
+            steps.deleteDir(workspaceExtDir)
+            steps.deleteDir(configurationExtRoot)
+
+            Logger.println("Конвертация исходников расширения ${it} из формата EDT в формат Конфигуратора")                
+            steps.cmd(ringCommandExt)
+
+            steps.zip(configurationExtRoot, configurationExtZip)
+            steps.stash("$extSuffix${it}_$CONFIGURATION_ZIP_STASH", configurationExtZip)
+
+        }
     }
 
 }
