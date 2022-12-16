@@ -52,7 +52,7 @@ class EdtToDesignerFormatTransformation implements Serializable {
 
         def ringOpts = [Constants.DEFAULT_RING_OPTS]
         steps.withEnv(ringOpts) {
-            steps.cmd(ringCommand)
+        //    steps.cmd(ringCommand)
         }
 
         steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
@@ -79,7 +79,10 @@ class EdtToDesignerFormatTransformation implements Serializable {
             steps.deleteDir(configurationExtRoot)
 
             Logger.println("Конвертация исходников расширения ${it} из формата EDT в формат Конфигуратора")                
-            steps.cmd(ringCommandExt)
+
+            steps.withEnv(ringOpts) {
+                steps.cmd(ringCommandExt)
+            }
 
             steps.zip(configurationExtRoot, configurationExtZip)
             steps.stash("$extSuffix${it}_$CONFIGURATION_ZIP_STASH", configurationExtZip)
