@@ -73,7 +73,7 @@ class EdtToDesignerFormatTransformation implements Serializable {
             def configurationExtZip = "build/ext-${extName}.zip"
             def configurationExtZipStash = "${extName}-zip"
 
-            ringCommandExt = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceExtDir\" --project \"$projectExtDir\" --configuration-files \"$configurationExtRoot\""
+            def ringCommandExt = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceExtDir\" --project \"$projectExtDir\" --configuration-files \"$configurationExtRoot\""
 
             steps.deleteDir(workspaceExtDir)
             steps.deleteDir(configurationExtRoot)
