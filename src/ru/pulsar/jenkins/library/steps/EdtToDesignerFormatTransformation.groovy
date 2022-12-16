@@ -55,8 +55,8 @@ class EdtToDesignerFormatTransformation implements Serializable {
         //    steps.cmd(ringCommand)
         }
 
-        steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
-        steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
+        //steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
+        //steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
 
         //String workspaceExtDir
         //String projectExtDir
