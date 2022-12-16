@@ -68,7 +68,6 @@ class EdtToDesignerFormatTransformation implements Serializable {
             def projectExtDir = new File("$env.WORKSPACE_EXT/${it}").getCanonicalPath()
             def workspaceExtDir = "$env.WORKSPACE_EXT/${extName}" 
          
-            def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
             def configurationExtRoot = "$env.WORKSPACE_EXT/$EXT_DIR/${extName}"
             
             def configurationExtZip = "build/ext-${extName}.zip"
