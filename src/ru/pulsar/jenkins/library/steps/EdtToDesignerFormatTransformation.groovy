@@ -62,8 +62,9 @@ class EdtToDesignerFormatTransformation implements Serializable {
         //String projectExtDir
 
         srcExtDirs.each{
+            Logger.println("Путь к расширению ${it}")
             def extPathParts = it.split('/')
-            def extName = extPathParts[extPathParts.size()]
+            def extName = extPathParts[extPathParts.size() - 2]
 
             def projectExtDir = new File("$env.WORKSPACE/${it}").getCanonicalPath()
             def workspaceExtDir = "$env.WORKSPACE/${extName}" 
