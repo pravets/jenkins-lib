@@ -10,16 +10,19 @@ import ru.pulsar.jenkins.library.ioc.ContextRegistry
 @JsonIgnoreProperties(ignoreUnknown = true)
 class JobConfiguration implements Serializable {
     @JsonPropertyDescription("Версия платформы 1С:Предприятие в формате 8.3.хх.хххх.")
-    String v8version
+    String v8version;
 
     @JsonPropertyDescription("Версия модуля 1C:Enterprise Development Tools формате xxxx.x.x:x86_64")
-    String edtVersion
+    String edtVersion;
 
     @JsonPropertyDescription("Путь к корневому каталогу с исходниками конфигурации, в случае хранения исходников в формате EDT, необходимо указать путь к проекту")
-    String srcDir
+    String srcDir;
 
-    @JsonPropertyDescription("Массив путей к каталогам с исходниками расширений конфигурации, в случае хранения исходников в формате EDT, необходимо указать путь к проекту")
-    String[] srcExtDirs
+    @JsonPropertyDescription("Путь к корневому каталогу с исходниками расширений конфигурации")
+    String srcExtDir;
+
+    @JsonPropertyDescription("Массив имен директорий с исходниками расширений конфигурации")
+    String[] extNames;
 
     @JsonPropertyDescription("Формат исходников конфигурации и расширений")
     SourceFormat sourceFormat;
@@ -33,7 +36,7 @@ class JobConfiguration implements Serializable {
     TimeoutOptions timeoutOptions;
 
     @JsonPropertyDescription("Имя ветки по умолчанию. Значение по умолчанию - main.")
-    String defaultBranch
+    String defaultBranch;
 
     @JsonPropertyDescription("Идентификаторы сохраненных секретов")
     Secrets secrets;
