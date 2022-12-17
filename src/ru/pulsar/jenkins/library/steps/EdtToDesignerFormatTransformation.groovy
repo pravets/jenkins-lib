@@ -86,7 +86,7 @@ class EdtToDesignerFormatTransformation implements Serializable {
             }
 
             steps.zip(configurationExtRoot, configurationExtZip)
-            steps.stash("$extSuffix${it}_$CONFIGURATION_ZIP_STASH", configurationExtZip)
+            steps.stash("ext_${it}_$CONFIGURATION_ZIP_STASH", configurationExtZip)
 
         }
     }
