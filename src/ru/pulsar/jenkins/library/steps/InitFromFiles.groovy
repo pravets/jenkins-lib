@@ -30,6 +30,7 @@ class InitFromFiles implements Serializable {
         Logger.println("Распаковка файлов")
 
         String srcDir;
+        String srcExtBuildDir;
 
         if (config.sourceFormat == SourceFormat.EDT) {
             def env = steps.env();
@@ -37,6 +38,18 @@ class InitFromFiles implements Serializable {
 
             steps.unstash(EdtToDesignerFormatTransformation.CONFIGURATION_ZIP_STASH)
             steps.unzip(srcDir, EdtToDesignerFormatTransformation.CONFIGURATION_ZIP)
+            
+            def srcExtDir = config.srcExtDir
+            def extNames = config.extNames
+
+            if (srcExtDir.size() > 0 && extNames.size() > 0) {
+                srcExtBuildDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.EXT_DIR"
+                extNames.each {
+                    steps.unstash("ext-${it}-zip")
+                    steps.unzip("$srcExtBuildDir\${it}", "build/ext-${it}.zip")
+                }
+            }
+
         } else {
             srcDir = config.srcDir;
         }
@@ -45,5 +58,14 @@ class InitFromFiles implements Serializable {
         String vrunnerPath = VRunner.getVRunnerPath();
         def initCommand = "$vrunnerPath init-dev --src $srcDir --ibconnection \"/F./build/ib\""
         VRunner.exec(initCommand)
+
+        if (srcExtDir.size() > 0 && extNames.size() > 0) {
+                extNames.each {
+                    Logger.println("Выполнение загрузки конфигурации из файлов")
+                    def initExtCommand = "$vrunnerPath compileext $srcExtBuildDir\${it} ${it} --ibconnection \"/F./build/ib\" --update-db"
+                    VRunner.exec(initExtCommand)
+                }
+        }
+
     }
 }
