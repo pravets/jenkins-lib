@@ -44,12 +44,22 @@ class EdtValidate implements Serializable {
             projectList = "--project-list \"$projectDir\""
         }
 
+        def srcExtDir = config.srcExtDir
+        def extNames = config.extNames
+
+        if (srcExtDir.size() > 0 && extNames.count() > 0) {
+            extNames.each {
+                String projectExtDir = new File("$env.WORKSPACE/$srcExtDir/${it}").getCanonicalPath()
+                projectList = "$projectList \"$projectExtDir\""
+            }
+        }
+
         def resultFile = "$env.WORKSPACE/$RESULT_FILE"
         def edtVersionForRing = EDT.ringModule(config)
 
         Logger.println("Выполнение валидации EDT")
 
-        def ringCommand = "ring $edtVersionForRing workspace validate --workspace-location \"$workspaceLocation\" --file \"$resultFile\" $projectList"
+        def ringCommand = "rinsg $edtVersionForRing workspace validate --workspace-location \"$workspaceLocation\" --file \"$resultFile\" $projectList"
         def ringOpts = [Constants.DEFAULT_RING_OPTS]
         steps.withEnv(ringOpts) {
             steps.catchError {
