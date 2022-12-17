@@ -37,7 +37,8 @@ class EdtToDesignerFormatTransformation implements Serializable {
         def env = steps.env();
 
         def srcDir = config.srcDir
-        def srcExtDirs = config.srcExtDirs
+        def srcExtDir = config.srcExtDir
+        def extNames = config.extNames
         def projectDir = new File("$env.WORKSPACE/$srcDir").getCanonicalPath()
         def workspaceDir = "$env.WORKSPACE/$WORKSPACE" 
         def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
@@ -61,18 +62,17 @@ class EdtToDesignerFormatTransformation implements Serializable {
         //String workspaceExtDir
         //String projectExtDir
 
-        srcExtDirs.each{
+        extNames.each{
             Logger.println("Путь к расширению ${it}")
             def extPathParts = it.split('/')
-            def extName = extPathParts[extPathParts.size() - 2]
-
-            def projectExtDir = new File("$env.WORKSPACE/${it}").getCanonicalPath()
-            def workspaceExtDir = "$env.WORKSPACE/${extName}" 
+            
+            def projectExtDir = new File("$env.WORKSPACE/${srcExtDir}/${it}").getCanonicalPath()
+            def workspaceExtDir = "$env.WORKSPACE/$WORKSPACE_EXT/${it}" 
          
             def configurationExtRoot = "$env.WORKSPACE/$WORKSPACE_EXT/$EXT_DIR/${extName}"
             
-            def configurationExtZip = "build/ext-${extName}.zip"
-            def configurationExtZipStash = "${extName}-zip"
+            def configurationExtZip = "build/ext-${it}.zip"
+            def configurationExtZipStash = "${it}-zip"
 
             def ringCommandExt = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceExtDir\" --project \"$projectExtDir\" --configuration-files \"$configurationExtRoot\""
 
