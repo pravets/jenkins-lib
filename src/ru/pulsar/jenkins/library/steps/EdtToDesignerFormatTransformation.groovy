@@ -53,14 +53,11 @@ class EdtToDesignerFormatTransformation implements Serializable {
 
         def ringOpts = [Constants.DEFAULT_RING_OPTS]
         steps.withEnv(ringOpts) {
-        //    steps.cmd(ringCommand)
+            steps.cmd(ringCommand)
         }
 
-        //steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
-        //steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
-
-        //String workspaceExtDir
-        //String projectExtDir
+        steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
+        steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
 
         extNames.each{
             Logger.println("Путь к расширению ${it}")
