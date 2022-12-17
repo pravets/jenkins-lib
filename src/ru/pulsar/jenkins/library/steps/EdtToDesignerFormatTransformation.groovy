@@ -59,8 +59,7 @@ class EdtToDesignerFormatTransformation implements Serializable {
         steps.zip(CONFIGURATION_DIR, CONFIGURATION_ZIP)
         steps.stash(CONFIGURATION_ZIP_STASH, CONFIGURATION_ZIP)
 
-        extNames.each{
-            Logger.println("Путь к расширению ${it}")
+        extNames.each {
             def extPathParts = it.split('/')
             
             def projectExtDir = new File("$env.WORKSPACE/${srcExtDir}/${it}").getCanonicalPath()
