@@ -32,7 +32,7 @@ class InitFromFiles implements Serializable {
         String srcDir;
         String srcExtDir;
         String srcExtBuildDir;
-        String extNames;
+        String[] extNames;
 
         if (config.sourceFormat == SourceFormat.EDT) {
             def env = steps.env();
