@@ -30,6 +30,7 @@ class InitFromFiles implements Serializable {
         Logger.println("Распаковка файлов")
 
         String srcDir;
+        String srcExtDir;
         String srcExtBuildDir;
 
         if (config.sourceFormat == SourceFormat.EDT) {
@@ -39,7 +40,7 @@ class InitFromFiles implements Serializable {
             steps.unstash(EdtToDesignerFormatTransformation.CONFIGURATION_ZIP_STASH)
             steps.unzip(srcDir, EdtToDesignerFormatTransformation.CONFIGURATION_ZIP)
             
-            def srcExtDir = config.srcExtDir
+            srcExtDir = config.srcExtDir
             def extNames = config.extNames
 
             if (srcExtDir.size() > 0 && extNames.size() > 0) {
