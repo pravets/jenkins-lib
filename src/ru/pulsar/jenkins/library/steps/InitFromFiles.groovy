@@ -34,8 +34,10 @@ class InitFromFiles implements Serializable {
         String srcExtBuildDir;
         String[] extNames;
 
+        def env = steps.env();
+
         if (config.sourceFormat == SourceFormat.EDT) {
-            def env = steps.env();
+          
             srcDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.CONFIGURATION_DIR"
 
             steps.unstash(EdtToDesignerFormatTransformation.CONFIGURATION_ZIP_STASH)
