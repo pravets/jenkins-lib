@@ -50,7 +50,7 @@ class InitFromFiles implements Serializable {
                     Logger.println("unstash ext-${it}-zip")
                     steps.unstash("ext-${it}-zip")
                     Logger.println("unzip $srcExtBuildDir/${it}", "build/ext-${it}.zip")
-                    steps.unzip("$srcExtBuildDir\${it}", "build/ext-${it}.zip")
+                    steps.unzip("$srcExtBuildDir/${it}", "build/ext-${it}.zip")
                 }
             }
 
