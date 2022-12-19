@@ -45,10 +45,10 @@ class InitFromFiles implements Serializable {
             extNames = config.extNames
 
             if (srcExtDir.size() > 0 && extNames.size() > 0) {
-                srcExtBuildDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.EXT_DIR/${it}"
+                srcExtBuildDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.EXT_DIR"
                 extNames.each {
                     steps.unstash("ext-${it}-zip")
-                    steps.unzip("$srcExtBuildDir", "build/ext-${it}.zip")
+                    steps.unzip("$srcExtBuildDir/${it}", "build/ext-${it}.zip")
                 }
             }
 
@@ -63,8 +63,9 @@ class InitFromFiles implements Serializable {
 
         if (srcExtDir.size() > 0 && extNames.size() > 0) {
                 extNames.each {
-                    Logger.println("Выполнение загрузки конфигурации из файлов")
-                    def initExtCommand = "$vrunnerPath compileext $srcExtBuildDir ${it} --ibconnection \"/F./build/ib\" --updatedb"
+                    srcExtBuildDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.EXT_DIR"
+                    Logger.println("Выполнение загрузки конфигурации расширения \"${it}\" из файлов")
+                    def initExtCommand = "$vrunnerPath compileext $srcExtBuildDir/${it} ${it} --ibconnection \"/F./build/ib\" --updatedb"
                     VRunner.exec(initExtCommand)
                 }
         }
