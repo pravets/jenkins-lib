@@ -64,7 +64,7 @@ class InitFromFiles implements Serializable {
         if (srcExtDir.size() > 0 && extNames.size() > 0) {
                 extNames.each {
                     Logger.println("Выполнение загрузки конфигурации из файлов")
-                    def initExtCommand = "$vrunnerPath compileext $srcExtBuildDir\${it} ${it} --ibconnection \"/F./build/ib\" --update-db"
+                    def initExtCommand = "$vrunnerPath compileext $srcExtBuildDir\${it} ${it} --ibconnection \"/F./build/ib\" --updatedb"
                     VRunner.exec(initExtCommand)
                 }
         }
