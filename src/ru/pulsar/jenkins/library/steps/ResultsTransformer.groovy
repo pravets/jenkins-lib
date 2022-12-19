@@ -40,15 +40,16 @@ class ResultsTransformer implements Serializable {
 
         String srcDir = config.sourceFormat == SourceFormat.DESIGNER ? config.srcDir : Paths.get(config.srcDir, "src")
 
-        String srcExtDir;
-        String[] extNames;
+        String srcExtDir
+        String[] extNames
+        String srcItExtDir
 
         srcExtDir = config.srcExtDir
         extNames = config.extNames
 
         if (srcExtDir.size() > 0 && extNames.size() > 0) {
                 extNames.each {
-                    String srcItExtDir = config.sourceFormat == SourceFormat.DESIGNER ? "$srcExtDir/${it}" : Paths.get("$srcExtDir/${it}", "src")
+                    srcItExtDir = config.sourceFormat == SourceFormat.DESIGNER ? "$srcExtDir/${it}" : Paths.get("$srcExtDir/${it}", "src")
                     srcDir = "$srcDir, $srcItExtDir"
                 }
         }
