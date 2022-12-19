@@ -45,7 +45,6 @@ class InitFromFiles implements Serializable {
             extNames = config.extNames
 
             if (srcExtDir.size() > 0 && extNames.size() > 0) {
-                Logger.println("extNames $extNames")
                 srcExtBuildDir = "$env.WORKSPACE/$EdtToDesignerFormatTransformation.EXT_DIR"
                 extNames.each {
                     Logger.println("unstash ext-${it}-zip")
