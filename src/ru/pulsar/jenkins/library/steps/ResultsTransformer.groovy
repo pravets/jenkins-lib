@@ -50,7 +50,7 @@ class ResultsTransformer implements Serializable {
         if (srcExtDir.size() > 0 && extNames.size() > 0) {
                 extNames.each {
                     srcItExtDir = config.sourceFormat == SourceFormat.DESIGNER ? "$srcExtDir/${it}" : Paths.get("$srcExtDir/${it}", "src")
-                    srcDir = "$srcDir, $srcItExtDir"
+                    srcDir = "$srcDir, ${srcItExtDir}"
                 }
         }
 
