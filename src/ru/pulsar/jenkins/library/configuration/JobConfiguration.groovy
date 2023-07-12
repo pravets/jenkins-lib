@@ -18,6 +18,12 @@ class JobConfiguration implements Serializable {
     @JsonPropertyDescription("Путь к корневому каталогу с исходниками конфигурации, в случае хранения исходников в формате EDT, необходимо указать путь к проекту")
     String srcDir
 
+    @JsonPropertyDescription("Путь к корневому каталогу с исходниками расширений конфигурации")
+    String srcExtDir
+
+    @JsonPropertyDescription("Массив имен директорий с исходниками расширений конфигурации")
+    String[] extNames
+
     @JsonPropertyDescription("Формат исходников конфигурации")
     SourceFormat sourceFormat;
 
