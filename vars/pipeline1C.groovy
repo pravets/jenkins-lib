@@ -56,16 +56,34 @@ void call() {
 
                         stages {
                             stage('Трансформация из формата EDT') {
-                                agent {
-                                    label agentEdt
-                                }
-                                when {
-                                    beforeAgent true
-                                    expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT }
-                                }
-                                steps {
-                                    timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
-                                        edtToDesignerFormatTransformation config
+                                parallel {
+                                    stage('Трансформация основной конфигурации из формата EDT') {
+                                        agent {
+                                            label agentEdt
+                                        }
+                                        when {
+                                            beforeAgent true
+                                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT }
+                                        }
+                                        steps {
+                                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
+                                                edtToDesignerFormatTransformation config
+                                            }
+                                        }
+                                    }
+                                    stage('Трансформация конфигурации расширений из формата EDT') {
+                                        agent {
+                                            label agentEdt
+                                        }
+                                        when {
+                                            beforeAgent true
+                                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT && config.extNames.length > 0 }
+                                        }
+                                        steps {
+                                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
+                                                edtExtensionsToDesignerFormatTransformation config
+                                            }
+                                        }
                                     }
                                 }
                             }
