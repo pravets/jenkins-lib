@@ -58,28 +58,30 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
         def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
         def edtVersionForRing = EDT.ringModule(config)
 
-        extNames.each { extName ->
+        if (config.needExtensions()) {
+            extNames.each { extName ->
 
-            def projectDir = new File("$env.WORKSPACE/$srcExtDir/$extName").getCanonicalPath()
+                def projectDir = new File("$env.WORKSPACE/$srcExtDir/$extName").getCanonicalPath()
 
-            steps.deleteDir(workspaceDir)
-            steps.deleteDir(configurationRoot)
+                steps.deleteDir(workspaceDir)
+                steps.deleteDir(configurationRoot)
 
-            Logger.println("Конвертация исходников расширения $extName из формата EDT в формат Конфигуратора")
+                Logger.println("Конвертация исходников расширения $extName из формата EDT в формат Конфигуратора")
 
-            def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$configurationRoot\""
+                def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$configurationRoot\""
 
-            def ringOpts = [Constants.DEFAULT_RING_OPTS]
-            steps.withEnv(ringOpts) {
-                steps.cmd(ringCommand)
+                def ringOpts = [Constants.DEFAULT_RING_OPTS]
+                steps.withEnv(ringOpts) {
+                    steps.cmd(ringCommand)
+                }
+                def Configuration_Ext_Dir = pathToExtensionFiles(extName)
+                def Configuration_Ext_Zip = pathToExtensionZip(extName)
+                def Configuration_Ext_Zip_Stash = pathToExtensionZipStash(extName)
+
+                steps.zip(Configuration_Ext_Dir, Configuration_Ext_Zip)
+                steps.stash(Configuration_Ext_Zip_Stash, Configuration_Ext_Zip)
+
             }
-            def Configuration_Ext_Dir = pathToExtensionFiles(extName)
-            def Configuration_Ext_Zip = pathToExtensionZip(extName)
-            def Configuration_Ext_Zip_Stash = pathToExtensionZipStash(extName)
-
-            steps.zip(Configuration_Ext_Dir, Configuration_Ext_Zip)
-            steps.stash(Configuration_Ext_Zip_Stash, Configuration_Ext_Zip)
-
         }
     }
 
