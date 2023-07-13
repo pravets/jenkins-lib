@@ -12,7 +12,7 @@ import ru.pulsar.jenkins.library.utils.Logger
 class EdtExtensionsToDesignerFormatTransformation implements Serializable {
 
     public static final String EDT_WORKSPACE = 'build/edt-workspace-ext'
-    public static final String CONFIGURATION_DIR = 'build/cfe'
+    public static final String CONFIGURATION_DIR = 'build/cfe/EXT'
     public static final String CONFIGURATION_ZIP = 'build/cfe-EXT.zip'
     public static final String CONFIGURATION_ZIP_STASH = 'cfe-EXT-zip'
 
