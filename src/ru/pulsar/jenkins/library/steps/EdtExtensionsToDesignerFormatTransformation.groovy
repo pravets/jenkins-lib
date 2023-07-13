@@ -73,9 +73,9 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
             steps.withEnv(ringOpts) {
                 steps.cmd(ringCommand)
             }
-            def Configuration_Ext_Dir = CONFIGURATION_DIR.replace('EXT', extName)
-            def Configuration_Ext_Zip = CONFIGURATION_ZIP.replace('EXT', extName)
-            def Configuration_Ext_Zip_Stash = CONFIGURATION_ZIP_STASH.replace('EXT', extName)
+            def Configuration_Ext_Dir = pathToExtensionFiles(extName)
+            def Configuration_Ext_Zip = pathToExtensionZip(extName)
+            def Configuration_Ext_Zip_Stash = pathToExtensionZipStash(extName)
 
             steps.zip(Configuration_Ext_Dir, Configuration_Ext_Zip)
             steps.stash(Configuration_Ext_Zip_Stash, Configuration_Ext_Zip)
@@ -83,4 +83,18 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
         }
     }
 
+    static pathToExtensionFiles(String extName) {
+        def result = CONFIGURATION_DIR.replace('EXT', extName)
+        return result
+    }
+
+    static pathToExtensionZip(String extName) {
+        def result = CONFIGURATION_ZIP.replace('EXT', extName)
+        return result
+    }
+
+    static pathToExtensionZipStash(String extName) {
+        def result = CONFIGURATION_ZIP_STASH.replace('EXT', extName)
+        return result
+    }
 }
