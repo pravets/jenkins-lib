@@ -42,6 +42,16 @@ class EdtValidate implements Serializable {
         } else {
             String projectDir = new File("$env.WORKSPACE/$config.srcDir").getCanonicalPath()
             projectList = "--project-list \"$projectDir\""
+
+            if (config.needExtensions()) {
+                def extNames = config.extNames
+                def srcExtDir = config.srcExtDir
+
+                extNames.each {extName ->
+                    String projectExtDir = new File("$env.WORKSPACE/$srcExtDir/$extName").getCanonicalPath()
+                    projectList = "$projectList \"$projectExtDir\""
+                }
+            }
         }
 
         def resultFile = "$env.WORKSPACE/$RESULT_FILE"
