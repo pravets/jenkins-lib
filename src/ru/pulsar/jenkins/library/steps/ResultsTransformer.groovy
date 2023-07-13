@@ -39,6 +39,17 @@ class ResultsTransformer implements Serializable {
         def genericIssueFile = "$env.WORKSPACE/$RESULT_FILE"
 
         String srcDir = config.sourceFormat == SourceFormat.DESIGNER ? config.srcDir : Paths.get(config.srcDir, "src")
+
+        if (config.needExtensions()) {
+            def srcExtDir = config.srcExtDir
+            def extNames = config.extNames
+
+            extNames.each {extName ->
+                def srcItExtDir = config.sourceFormat == SourceFormat.DESIGNER ? "$srcExtDir/$extName" : Paths.get("$srcExtDir/$extName", "src")
+                srcDir = "$srcDir, $srcItExtDir"
+            }
+        }
+
         steps.cmd("stebi convert -r $edtValidateFile $genericIssueFile $srcDir")
 
         if (config.resultsTransformOptions.removeSupport) {
