@@ -70,6 +70,8 @@ class InitFromFiles implements Serializable {
             } else {
 
             }
+        } else {
+            Logger.println("Загрузка расширений не требуется.")
         }
     }
 }
