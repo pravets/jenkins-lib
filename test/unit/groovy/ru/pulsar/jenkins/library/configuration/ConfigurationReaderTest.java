@@ -75,6 +75,10 @@ class ConfigurationReaderTest {
 
     assertThat(jobConfiguration.getNotificationsOptions().getTelegramNotificationOptions().getOnAlways()).isFalse();
     assertThat(jobConfiguration.getNotificationsOptions().getTelegramNotificationOptions().getOnFailure()).isTrue();
+
+    assertThat(jobConfiguration.getSrcExtDir()).isEqualTo("/src/cfe");
+    assertThat(jobConfiguration.getExtNames()).hasSize(3);
+    assertThat(jobConfiguration.getExtNames()[0]).isEqualTo("ext1");
   }
 
   @Test

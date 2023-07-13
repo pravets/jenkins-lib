@@ -57,5 +57,7 @@
       "onFailure": true
     }
   },
-  "logosConfig": "logger.rootLogger=DEBUG"
+  "logosConfig": "logger.rootLogger=DEBUG",
+  "srcExtDir": "/src/cfe",
+  "extNames": ["ext1,ext2,ext3"]
 }
