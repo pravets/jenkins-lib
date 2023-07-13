@@ -34,14 +34,21 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
 
         def extNames = config.extNames
 
+        def needCancelProcess = false
+
         if (extNames.size() == 0) {
             Logger.println("Не задан массив расширений для конвертации.")
-            return
+            needCancelProcess = true
         }
 
         def srcExtDir = config.srcExtDir
         if (srcExtDir.length() == 0) {
             Logger.println("Не задан путь к каталогу расширений для конвертации.")
+            needCancelProcess true
+        }
+
+        if (needCancelProcess) {
+            Logger.println("Конвертация расширений из формата EDT в формат конфигуратора отменена.")
             return
         }
 
