@@ -50,7 +50,7 @@ class ResultsTransformer implements Serializable {
             }
         }
 
-        steps.cmd("stebi convert -r $edtValidateFile $genericIssueFile $srcDir")
+        steps.cmd("stebi convert -r $edtValidateFile $genericIssueFile \"$srcDir\"")
 
         if (config.resultsTransformOptions.removeSupport) {
             def supportLevel = config.resultsTransformOptions.supportLevel
