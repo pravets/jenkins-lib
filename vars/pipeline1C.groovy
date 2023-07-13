@@ -46,6 +46,39 @@ void call() {
                 }
             }
 
+            stage('Трансформация из формата EDT') {
+                parallel {
+                    stage('Трансформация основной конфигурации из формата EDT') {
+                        agent {
+                            label agentEdt
+                        }
+                        when {
+                            beforeAgent true
+                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT }
+                        }
+                        steps {
+                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
+                                edtToDesignerFormatTransformation config
+                            }
+                        }
+                    }
+                    stage('Трансформация конфигурации расширений из формата EDT') {
+                        agent {
+                            label agentEdt
+                        }
+                        when {
+                            beforeAgent true
+                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT && config.extNames.length > 0 }
+                        }
+                        steps {
+                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
+                                edtExtensionsToDesignerFormatTransformation config
+                            }
+                        }
+                    }
+                }
+            }
+
             stage('Подготовка') {
                 parallel {
                     stage('Подготовка 1C базы') {
@@ -55,39 +88,6 @@ void call() {
                         }
 
                         stages {
-                            stage('Трансформация из формата EDT') {
-                                parallel {
-                                    stage('Трансформация основной конфигурации из формата EDT') {
-                                        agent {
-                                            label agentEdt
-                                        }
-                                        when {
-                                            beforeAgent true
-                                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT }
-                                        }
-                                        steps {
-                                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
-                                                edtToDesignerFormatTransformation config
-                                            }
-                                        }
-                                    }
-                                    stage('Трансформация конфигурации расширений из формата EDT') {
-                                        agent {
-                                            label agentEdt
-                                        }
-                                        when {
-                                            beforeAgent true
-                                            expression { config.stageFlags.needInfoBase() && config.infoBaseFromFiles() && config.sourceFormat == SourceFormat.EDT && config.extNames.length > 0 }
-                                        }
-                                        steps {
-                                            timeout(time: config.timeoutOptions.edtToDesignerFormatTransformation, unit: TimeUnit.MINUTES) {
-                                                edtExtensionsToDesignerFormatTransformation config
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
                             stage('Подготовка 1С базы') {
                                 agent {
                                     label agent1C
