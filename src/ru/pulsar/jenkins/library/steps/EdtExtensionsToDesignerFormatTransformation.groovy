@@ -52,10 +52,11 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
             return
         }
 
+        def env = steps.env()
+
         def workspaceDir = "$env.WORKSPACE/$EDT_WORKSPACE"
         def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
         def edtVersionForRing = EDT.ringModule(config)
-        def env = steps.env()
 
         extNames.each { extName ->
 
