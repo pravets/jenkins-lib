@@ -62,24 +62,24 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
             extNames.each { extName ->
 
                 def projectDir = new File("$env.WORKSPACE/$srcExtDir/$extName").getCanonicalPath()
+                def confExtDir = pathToExtensionFiles(extName)
+                def confExtZip = pathToExtensionZip(extName)
+                def confExtZipStash = pathToExtensionZipStash(extName)
 
                 steps.deleteDir(workspaceDir)
-                steps.deleteDir(configurationRoot)
+                steps.deleteDir(confExtDir)
 
                 Logger.println("Конвертация исходников расширения $extName из формата EDT в формат Конфигуратора")
 
-                def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$configurationRoot\""
+                def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$confExtDir\""
 
                 def ringOpts = [Constants.DEFAULT_RING_OPTS]
                 steps.withEnv(ringOpts) {
                     steps.cmd(ringCommand)
                 }
-                def Configuration_Ext_Dir = pathToExtensionFiles(extName)
-                def Configuration_Ext_Zip = pathToExtensionZip(extName)
-                def Configuration_Ext_Zip_Stash = pathToExtensionZipStash(extName)
 
-                steps.zip(Configuration_Ext_Dir, Configuration_Ext_Zip)
-                steps.stash(Configuration_Ext_Zip_Stash, Configuration_Ext_Zip)
+                steps.zip(confExtDir, confExtZip)
+                steps.stash(confExtZipStash, confExtZip)
 
             }
         }
