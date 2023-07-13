@@ -60,15 +60,16 @@ class InitFromFiles implements Serializable {
         VRunner.exec(initCommand)
 
         if (config.needExtensions()) {
-            if (config.sourceFormat == SourceFormat.EDT) {
-                extNames.each {extName ->
-                    Logger.println("Выполнение загрузки конфигурации расширения $extName из файлов")
+            Logger.println("Выполнение загрузки конфигурации расширений из файлов")
+            extNames.each {extName ->
+                Logger.println("Выполнение загрузки конфигурации расширения $extName из файлов")
+                if (config.sourceFormat == SourceFormat.EDT) {
                     def srcExtDir = EdtExtensionsToDesignerFormatTransformation.pathToExtensionFiles(extName)
                     def initExtCommand = "$vrunnerPath compileext $srcExtDir $extName --ibconnection \"/F./build/ib\" --updatedb"
                     VRunner.exec(initExtCommand)
-                }
-            } else {
+                } else {
 
+                }
             }
         } else {
             Logger.println("Загрузка расширений не требуется.")
