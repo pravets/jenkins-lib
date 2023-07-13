@@ -30,6 +30,7 @@ class InitFromFiles implements Serializable {
         Logger.println("Распаковка файлов")
 
         String srcDir;
+        def extNames = config.extNames
 
         if (config.sourceFormat == SourceFormat.EDT) {
             def env = steps.env();
@@ -37,6 +38,18 @@ class InitFromFiles implements Serializable {
 
             steps.unstash(EdtToDesignerFormatTransformation.CONFIGURATION_ZIP_STASH)
             steps.unzip(srcDir, EdtToDesignerFormatTransformation.CONFIGURATION_ZIP)
+
+            if (config.needExtensions()) {
+
+                extNames.each {extName ->
+                    def Configuration_Ext_Dir = EdtExtensionsToDesignerFormatTransformation.pathToExtensionFiles(extName)
+                    def Configuration_Ext_Zip = EdtExtensionsToDesignerFormatTransformation.pathToExtensionZip(extName)
+                    def Configuration_Ext_Zip_Stash = EdtExtensionsToDesignerFormatTransformation.pathToExtensionZipStash(extName)
+                    
+                    steps.unstash(Configuration_Ext_Zip_Stash)
+                    steps.unzip(Configuration_Ext_Dir, Configuration_Ext_Zip)
+                }
+            }
         } else {
             srcDir = config.srcDir;
         }
@@ -45,5 +58,18 @@ class InitFromFiles implements Serializable {
         String vrunnerPath = VRunner.getVRunnerPath();
         def initCommand = "$vrunnerPath init-dev --src $srcDir --ibconnection \"/F./build/ib\""
         VRunner.exec(initCommand)
+
+        if (config.needExtensions()) {
+            if (config.sourceFormat == SourceFormat.EDT) {
+                extNames.each {extName ->
+                    Logger.println("Выполнение загрузки конфигурации расширения $extName из файлов")
+                    def srcExtDir = EdtExtensionsToDesignerFormatTransformation.pathToExtensionFiles(extName)
+                    def initExtCommand = "$vrunnerPath compileext $srcExtDir $extName --ibconnection \"/F./build/ib\" --updatedb"
+                    VRunner.exec(initExtCommand)
+                }
+            } else {
+
+            }
+        }
     }
 }
