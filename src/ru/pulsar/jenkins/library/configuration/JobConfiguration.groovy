@@ -117,4 +117,12 @@ class JobConfiguration implements Serializable {
         }
         return edtVersionForRing
     }
+
+    Boolean needExtensions() {
+        if ( srcExtDir && extNames.size() > 0 ) {
+            return true
+        } else {
+            return false
+        }
+    }
 }
