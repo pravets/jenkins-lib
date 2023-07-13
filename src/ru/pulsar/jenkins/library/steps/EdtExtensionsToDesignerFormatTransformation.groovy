@@ -34,7 +34,7 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
 
         def extNames = config.extNames
 
-        if (extNames.length == 0) {
+        if (extNames.size() == 0) {
             Logger.println("Не задан массив расширений для конвертации.")
             return
         }
