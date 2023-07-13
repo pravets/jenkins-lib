@@ -47,7 +47,7 @@ void call() {
             }
 
             stage('Подготовка') {
-                stages {
+                parallel {
                     stage('Подготовка 1C базы') {
                         when {
                             beforeAgent true
