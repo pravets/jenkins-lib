@@ -55,7 +55,6 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
         def env = steps.env()
 
         def workspaceDir = "$env.WORKSPACE/$EDT_WORKSPACE"
-        def configurationRoot = "$env.WORKSPACE/$CONFIGURATION_DIR"
         def edtVersionForRing = EDT.ringModule(config)
 
         if (config.needExtensions()) {
@@ -66,12 +65,14 @@ class EdtExtensionsToDesignerFormatTransformation implements Serializable {
                 def confExtZip = pathToExtensionZip(extName)
                 def confExtZipStash = pathToExtensionZipStash(extName)
 
+                def configurationRoot = "$env.WORKSPACE/$confExtDir"
+
                 steps.deleteDir(workspaceDir)
-                steps.deleteDir(confExtDir)
+                steps.deleteDir(configurationRoot)
 
                 Logger.println("Конвертация исходников расширения $extName из формата EDT в формат Конфигуратора")
 
-                def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$confExtDir\""
+                def ringCommand = "ring $edtVersionForRing workspace export --workspace-location \"$workspaceDir\" --project \"$projectDir\" --configuration-files \"$configurationRoot\""
 
                 def ringOpts = [Constants.DEFAULT_RING_OPTS]
                 steps.withEnv(ringOpts) {
